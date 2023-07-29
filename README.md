@@ -41,8 +41,8 @@
 ```
 CREATE TABLE users (
     id CHAR(36) PRIMARY KEY,
-    username VARCHAR(20) NOT NULL,
-    email VARCHAR(40) NOT NULL,
+    username VARCHAR(20) NOT NULL UNIQUE,
+    email VARCHAR(40) NOT NULL UNIQUE,
     password CHAR(64) NOT NULL
 );
 ```
