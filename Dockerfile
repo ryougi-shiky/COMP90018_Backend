@@ -1,5 +1,5 @@
 # Use the official Golang image as a base image.
-FROM golang:1.16-alpine as builder
+FROM golang:1.20-alpine as builder
 
 # Add Maintainer Info
 LABEL maintainer="ryougishiky yzm805482013@gmail.com"
@@ -17,7 +17,7 @@ RUN go mod download
 COPY . .
 
 # Build the Go app
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd/mobile_app_server/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd/mobile_app_server/
 
 ######## Start a new stage from scratch #######
 FROM alpine:latest  
