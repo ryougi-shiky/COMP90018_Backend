@@ -23,4 +23,4 @@ jobs:
     - name: Log into Docker Hub
       run: docker login -u yzm805482013@gmail.com -p Yzm7046406
     - name: Push the Docker image
-      run: docker push comp90018server
+      run: docker push comp90018server:$(date +%s)
