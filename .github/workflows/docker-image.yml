@@ -1,0 +1,26 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "dev" ]
+  pull_request:
+    branches: [ "dev" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: |
+        docker build . --file Dockerfile --tag comp90018_server:$(date +%s) || {
+          echo "Build failed with exit code $?";
+          exit 1;
+        }
+    - name: Log into Docker Hub
+      run: docker login -u yzm805482013@gmail.com -p Yzm7046406
+    - name: Push the Docker image
+      run: docker push comp90018_server
