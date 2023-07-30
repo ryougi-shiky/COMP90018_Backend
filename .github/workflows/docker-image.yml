@@ -16,8 +16,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build the Docker image
       run: |
-        docker build . --file Dockerfile --tag ryougishiky/comp90018server:$(date +%s)
- || {
+        docker build . --file Dockerfile --tag ryougishiky/comp90018server:$(date +%s)|| {
           echo "Build failed with exit code $?";
           exit 1;
         }
