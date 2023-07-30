@@ -9,6 +9,7 @@ import (
 
 type UserService interface {
 	RegisterUser(user *models.User) error
+	GetUserByEmail(email string) (*models.User, error)
 }
 
 type UserServiceImpl struct {
@@ -20,8 +21,12 @@ func (s *UserServiceImpl) RegisterUser(user *models.User) error  {
 	hasher := sha256.New()
 	hasher.Write([]byte(user.Password))
 	user.Password = hex.EncodeToString(hasher.Sum(nil))
-	
+
 	return s.UserRepository.CreateUser(user)
+}
+
+func (s *UserServiceImpl) GetUserByEmail(email string) (*models.User, error) {
+	return s.UserRepository.GetUserByEmail(email)
 }
 
 func NewUserService(userRepo repository.UserRepository) UserService {

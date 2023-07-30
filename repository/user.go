@@ -12,6 +12,7 @@ import (
 
 type UserRepository interface {
 	CreateUser(user *models.User) error
+	GetUserByEmail(email string) (*models.User, error)
 }
 
 type MySQLUserRepository struct {
@@ -49,4 +50,12 @@ func NewUserRepository() UserRepository {
 
 func (r *MySQLUserRepository) CreateUser(user *models.User) error{
 	return r.db.Create(user).Error
+}
+
+func (r *MySQLUserRepository) GetUserByEmail(email string) (*models.User, error) {
+	var user models.User
+	if err := r.db.Where("email = ?", email).Find(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
 }
