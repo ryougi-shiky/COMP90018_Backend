@@ -1,3 +1,7 @@
+/*
+This file defines the interface of user services.
+The router will call the functions here.
+*/
 package services
 
 import (
@@ -12,11 +16,12 @@ type UserService interface {
 	GetUserByEmail(email string) (*models.User, error)
 }
 
+// UserServiceImpl has derived from UserService, because it implements its methods below
 type UserServiceImpl struct {
 	UserRepository repository.UserRepository
 }
 
-func (s *UserServiceImpl) RegisterUser(user *models.User) error  {
+func (s *UserServiceImpl) RegisterUser(user *models.User) error {
 	// sha256 hashing the password
 	hasher := sha256.New()
 	hasher.Write([]byte(user.Password))

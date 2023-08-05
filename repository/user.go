@@ -2,8 +2,8 @@ package repository
 
 import (
 	"fmt"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	//_ "github.com/microsoft/go-mssqldb"
 	"log"
 
@@ -25,25 +25,16 @@ var user = "doadmin"
 var password = "AVNS_Ae5PE66XCm2T9FJnUZX"
 var database = "defaultdb"
 
+// Create a new repository object. Connect to the database.
 func NewUserRepository() UserRepository {
 	// Build connection string
 	connString := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", user, password, server, port, database)
 	// Create connection pool
-	db, err := gorm.Open("mysql", connString)
+	db, err := gorm.Open(mysql.Open(connString), &gorm.Config{})
 	if err != nil {
 		log.Printf("Error opening database connection: %s\n", err.Error())
 	}
 	fmt.Printf("Database Connected!")
-
-	// Check if table exist, if not, create one
-	// if !db.HasTable(&models.User{}){
-	// 	db = db.AutoMigrate(&models.User{})
-	// 	if db.Error != nil {
-	// 		log.Printf("Error migrating database: %s\n", db.Error.Error())
-	// 	}
-	// } else {
-	// 	log.Println("Database migrated successfully")
-	// }
 
 	return &MySQLUserRepository{db: db}
 }
