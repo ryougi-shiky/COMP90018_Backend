@@ -11,7 +11,8 @@
   /pkg
     somepackage.go
   /api
-    version.go
+    /routesHandler
+      userRoute.go
   /web
     handler.go
   /models
