@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	_ "github.com/microsoft/go-mssqldb"
+	//_ "github.com/microsoft/go-mssqldb"
 	"log"
 
 	"github.com/ryougi-shiky/COMP90018_Backend/models"
@@ -19,17 +19,17 @@ type MySQLUserRepository struct {
 	db *gorm.DB
 }
 
-var server = "comp90018t15g02.database.windows.net"
-var port = 1433
-var user = "comp90018"
-var password = "Chelly0412"
-var database = "mobile_app"
+var server = "db-mysql-comp90018-do-user-14450765-0.b.db.ondigitalocean.com"
+var port = 25060
+var user = "doadmin"
+var password = "AVNS_Ae5PE66XCm2T9FJnUZX"
+var database = "defaultdb"
 
 func NewUserRepository() UserRepository {
 	// Build connection string
-	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;database=%s;", server, user, password, port, database)
+	connString := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", user, password, server, port, database)
 	// Create connection pool
-	db, err := gorm.Open("mssql", connString)
+	db, err := gorm.Open("mysql", connString)
 	if err != nil {
 		log.Printf("Error opening database connection: %s\n", err.Error())
 	}
@@ -44,11 +44,11 @@ func NewUserRepository() UserRepository {
 	// } else {
 	// 	log.Println("Database migrated successfully")
 	// }
-	
+
 	return &MySQLUserRepository{db: db}
 }
 
-func (r *MySQLUserRepository) CreateUser(user *models.User) error{
+func (r *MySQLUserRepository) CreateUser(user *models.User) error {
 	return r.db.Create(user).Error
 }
 
