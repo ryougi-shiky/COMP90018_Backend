@@ -4,14 +4,15 @@
 
 ##### Directory Structure
 ```
-/myapp
+/COMP90018_Backend
   /cmd
-    /myapp
+    /mobile_app_server
       main.go
   /pkg
     somepackage.go
   /api
-    version.go
+    /routesHandlers
+      userRoute.go
   /web
     handler.go
   /models
