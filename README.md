@@ -47,3 +47,13 @@ CREATE TABLE users (
     password CHAR(64) NOT NULL
 );
 ```
+
+### Memos Table
+```
+CREATE TABLE memos (
+    memoId CHAR(36) PRIMARY KEY,
+    userId CHAR(36) NOT NULL,
+    title VARCHAR(20) NOT NULL,
+    content VARCHAR(200) NOT NULL
+);
+```
