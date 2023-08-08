@@ -5,22 +5,18 @@
 ##### Directory Structure
 ```
 /COMP90018_Backend
-  /cmd
-    /mobile_app_server
-      main.go
-  /pkg
-    somepackage.go
   /api
     /routesHandler
       userRoute.go
-  /web
-    handler.go
+      memoRoute.go
   /models
     user.go
   /repository
     user.go
   /services
     user.go
+  /server
+    main.go
   Dockerfile
   README.md
 ```
