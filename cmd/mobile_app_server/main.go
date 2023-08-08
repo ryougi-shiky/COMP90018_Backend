@@ -13,12 +13,26 @@ import (
 
 func main() {
 	fmt.Println("Starting server...")
-	userRepository := repository.NewUserRepository()
+	db, err := repository.ConnectToDB()
+	if err != nil {
+		log.Fatalf("Failed to connect to DB: %s", err.Error())
+	}
+
+	userRepository := repository.NewUserRepository(db)
+	memoRepository := repository.NewMemoRepository(db)
+
 	userService := services.NewUserService(userRepository)
+	memoService := services.NewMemoService(memoRepository)
+
 	router := gin.Default()
 
 	router.POST("/user/register", routesHandlers.RegisterUserHandler(userService))
-	router.GET("user/login", routesHandlers.LoginUserHandler(userService))
+	router.GET("/user/login", routesHandlers.LoginUserHandler(userService))
+
+	router.POST("/memo/create", routesHandlers.CreateMemo(memoService))
+	router.PUT("/memo/update", routesHandlers.UpdateMemo(memoService))
+	router.DELETE("/memo/delete", routesHandlers.DeleteMemo(memoService))
+	router.GET("/memo/getmemos", routesHandlers.GetUserMemo(memoService))
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

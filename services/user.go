@@ -27,7 +27,7 @@ func (s *UserServiceImpl) RegisterUser(user *models.User) error {
 	hasher.Write([]byte(user.Password))
 	user.Password = hex.EncodeToString(hasher.Sum(nil))
 
-	return s.UserRepository.CreateUser(user)
+	return s.UserRepository.RegisterUser(user)
 }
 
 func (s *UserServiceImpl) GetUserByEmail(email string) (*models.User, error) {
