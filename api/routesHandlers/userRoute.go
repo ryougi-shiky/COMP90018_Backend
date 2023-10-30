@@ -1,25 +1,18 @@
 package routesHandlers
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"github.com/ryougi-shiky/COMP90018_Backend/models"
 	"github.com/ryougi-shiky/COMP90018_Backend/services"
+	"net/http"
 )
 
 type RegisterRequest struct {
 	Username string `json:"username" binding:"required"`
-	Email    string `json:"email" binding:"required"`
-	Password string `json:"password" binding:"required"`
 }
 
 type LoginRequest struct {
-	Email    string `json:"email" binding:"required"`
-	Password string `json:"password" binding:"required"`
+	Username string `json:"username" binding:"required"`
 }
 
 func RegisterUserHandler(userService services.UserService) gin.HandlerFunc {
@@ -31,10 +24,8 @@ func RegisterUserHandler(userService services.UserService) gin.HandlerFunc {
 		}
 
 		user := models.User{
-			ID:       uuid.New(),
 			Username: request.Username,
-			Email:    request.Email,
-			Password: request.Password,
+			Score:    0,
 		}
 
 		err := userService.RegisterUser(&user)
@@ -55,21 +46,47 @@ func LoginUserHandler(userService services.UserService) gin.HandlerFunc {
 			return
 		}
 
-		user, err := userService.GetUserByEmail(request.Email)
+		user, err := userService.GetUserByUsername(request.Username)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
 			return
 		}
 
-		hash := sha256.New()
-		hash.Write([]byte(request.Password))
-		hashedPassword := hex.EncodeToString(hash.Sum(nil))
+		c.JSON(http.StatusOK, gin.H{"message": "User logged in successfully", "score": user.Score})
+	}
+}
 
-		if user.Password != hashedPassword {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Incorrect password"})
+type UpdateScoreRequest struct {
+	Username string `json:"username" binding:"required"`
+	Score    int    `json:"score" binding:"required"`
+}
+
+func UpdateUserScoreHandler(userService services.UserService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var request UpdateScoreRequest
+		if err := c.ShouldBindJSON(&request); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"message": "User logged in successfully"})
+		err := userService.UpdateUserScore(request.Username, request.Score)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "User score updated successfully"})
+	}
+}
+
+func GetTopUsersHandler(userService services.UserService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		users, err := userService.GetTopUsers()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"top_users": users})
 	}
 }

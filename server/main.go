@@ -19,20 +19,15 @@ func main() {
 	}
 
 	userRepository := repository.NewUserRepository(db)
-	memoRepository := repository.NewMemoRepository(db)
 
 	userService := services.NewUserService(userRepository)
-	memoService := services.NewMemoService(memoRepository)
 
 	router := gin.Default()
 
 	router.POST("/user/register", routesHandlers.RegisterUserHandler(userService))
-	router.GET("/user/login", routesHandlers.LoginUserHandler(userService))
-
-	router.POST("/memo/create", routesHandlers.CreateMemo(memoService))
-	router.PUT("/memo/update", routesHandlers.UpdateMemo(memoService))
-	router.DELETE("/memo/delete", routesHandlers.DeleteMemo(memoService))
-	router.GET("/memo/getmemos", routesHandlers.GetUserMemo(memoService))
+	router.POST("/user/login", routesHandlers.LoginUserHandler(userService))
+	router.PATCH("/user/updateScore", routesHandlers.UpdateUserScoreHandler(userService))
+	router.GET("/user/getTopUsers", routesHandlers.GetTopUsersHandler(userService))
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

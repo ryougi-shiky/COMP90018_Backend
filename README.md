@@ -8,7 +8,6 @@
   /api
     /routesHandler
       userRoute.go
-      memoRoute.go
   /models
     user.go
   /repository
@@ -37,21 +36,8 @@
 ### Users Table
 ```
 CREATE TABLE users (
-    id CHAR(36) PRIMARY KEY,
-    username VARCHAR(20) NOT NULL UNIQUE,
-    email VARCHAR(40) NOT NULL UNIQUE,
-    password CHAR(64) NOT NULL
-);
-```
-
-### Memos Table
-```
-CREATE TABLE memos (
-    memoId CHAR(36) PRIMARY KEY,
-    userId CHAR(36) NOT NULL,
-    title VARCHAR(20) NOT NULL,
-    content VARCHAR(200) NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    username VARCHAR(20) NOT NULL,
+    score INT NOT NULL,
+    PRIMARY KEY (username)
 );
 ```

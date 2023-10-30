@@ -7,10 +7,10 @@ import (
 	"log"
 )
 
-var server = "db-mysql-comp90018-do-user-14450765-0.b.db.ondigitalocean.com"
-var port = 25060
 var user = "doadmin"
-var password = "AVNS_Ae5PE66XCm2T9FJnUZX"
+var password = "AVNS_zP2kyuFUoqgF3b4k0AT"
+var server = "db-mysql-syd1-21907-do-user-14450765-0.c.db.ondigitalocean.com"
+var port = 25060
 var database = "defaultdb"
 
 type MySQLUserRepository struct {
@@ -25,6 +25,7 @@ func ConnectToDB() (*gorm.DB, error) {
 	db, err := gorm.Open(mysql.Open(connString), &gorm.Config{})
 	if err != nil {
 		log.Printf("Error opening database connection: %s\n", err.Error())
+		return nil, err
 	}
 	fmt.Printf("Database Connected!")
 
