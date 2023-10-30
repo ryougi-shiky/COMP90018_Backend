@@ -2,7 +2,7 @@
 FROM golang:1.20-alpine as builder
 
 # Add Maintainer Info
-LABEL maintainer="ryougishiky yzm805482013@gmail.com"
+LABEL maintainer="hongdaz hongdaz1@student.unimelb.edu.au"
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
