@@ -23,12 +23,21 @@ func RegisterUserHandler(userService services.UserService) gin.HandlerFunc {
 			return
 		}
 
+		// Check if user already exists
+		existingUser, err := userService.GetUserByUsername(request.Username)
+		if err == nil {
+			// User exists, so log them in instead
+			c.JSON(http.StatusOK, gin.H{"message": "User already exists, logged in successfully", "score": existingUser.Score})
+			return
+		}
+
+		// If we're here, the user does not exist, so we can register them
 		user := models.User{
 			Username: request.Username,
 			Score:    0,
 		}
 
-		err := userService.RegisterUser(&user)
+		err = userService.RegisterUser(&user)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
